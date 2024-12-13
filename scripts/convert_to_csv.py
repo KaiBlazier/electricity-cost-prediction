@@ -18,7 +18,9 @@ def convert_to_csv(file_path):
 
 if __name__ == "__main__":
     data_dir = "data"
+    target_files = ['2019Usage', '2020Usage', '2021Usage', '2022Usage', '2023Usage']
     for file_name in os.listdir(data_dir):
-        file_path = os.path.join(data_dir, file_name)
-        convert_to_csv(file_path)
+        if any(file_name.startswith(target) for target in target_files):
+            file_path = os.path.join(data_dir, file_name)
+            convert_to_csv(file_path)
 
