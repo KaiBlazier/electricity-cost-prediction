@@ -1,44 +1,38 @@
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
-from load_data import load_data, preprocess_data
-import os
+from load_data import load_data
 
 def predict_future(df):
-    # Preprocess data if needed
-    df = preprocess_data(df)
+    # Print column names to verify
+    print("Column names:", df.columns)
     
-    # Extract year and month from the date column
-    df['year'] = pd.to_datetime(df['date']).dt.year
-    df['months'] = pd.to_datetime(df['date']).dt.months
+    # Handle non-finite values in the 'Year' and 'Months' columns
+    df['Year'] = df['Year'].fillna(0).astype(int)
+    df['Months'] = df['Months'].fillna(0).astype(int)
     
-    # Define features and target variable
-    X = df[['year', 'months']]
-    y = df['price']
+    # Ensure column name is correctly identified
+    target_column = 'PricePerHour(Cents)'
+    if target_column not in df.columns:
+        raise KeyError(f"'{target_column}' not found in DataFrame columns: {df.columns.tolist()}")
     
-    # Train the model
+    X = df[['Year', 'Months']]
+    y = df[target_column]
+    
     model = LinearRegression()
     model.fit(X, y)
     
-    # Generate future dates for prediction
     future_months = pd.date_range(start='2024-01-01', end='2024-12-01', freq='MS')
-    future_data = pd.DataFrame({'year': future_months.year, 'month': future_months.month})
+    future_data = pd.DataFrame({'Year': future_months.year, 'Months': future_months.month})
     
-    # Predict future prices
     predicted_prices = model.predict(future_data)
     future_data['predicted_price'] = predicted_prices
     
     return future_data
 
 if __name__ == "__main__":
-    data_dir = "data"
-    target_files = ['2019Usage', '2020Usage', '2021Usage', '2022Usage', '2023Usage']
-    for file_name in os.listdir(data_dir):
-        if any(file_name.startswith(target) for target in target_files):
-            file_path = os.path.join(data_dir, file_name.replace('.xlsx', '.csv'))
-            df = load_data(file_path)
-            if df is not None:
-                future_data = predict_future(df)
-                print(f"Predicted future data for {file_name}:")
-                print(future_data)
+    df = load_data()
+    future_data = predict_future(df)
+    future_data.to_csv('data/future_predictions.csv', index=False)
+    print(future_data)
 
