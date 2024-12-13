@@ -19,3 +19,6 @@ python scripts/clean_data.py
 python scripts/analyze_data.py
 ## Predict future costs:
 python scripts/predict_future.py
+## End Result
+should give you a csv file containing the monthly average for PricePerHour(cents) for the year of 2024. 
+3 key features are DATA CONVERSION, DATA ANALYSIS, FUTURE PREDICTIONS. 
