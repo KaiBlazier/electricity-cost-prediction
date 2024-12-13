@@ -34,8 +34,9 @@ def save_clean_data(df, output_path):
         print(f"Error saving cleaned data: {e}")
 
 if __name__ == "__main__":
-    input_file_path = 'data/your_data_file.csv'
-    output_file_path = 'data/cleaned_data_file.csv'
+    # Update this path to the correct file
+    input_file_path = 'data/2019Usage.csv'
+    output_file_path = 'data/cleaned_2019Usage.csv'
 
     df = load_data(input_file_path)
     if df is not None:
