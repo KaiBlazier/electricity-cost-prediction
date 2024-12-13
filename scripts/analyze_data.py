@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
 
 def load_data(file_path):
     try:
@@ -32,8 +33,12 @@ def analyze_data(df):
     plt.show()
 
 if __name__ == "__main__":
-    # Load cleaned data
-    file_path = 'data/cleaned_data_file.csv'
-    df = load_data(file_path)
-    if df is not None:
-        analyze_data(df)
+    data_dir = "data"
+    target_files = ['2019Usage', '2020Usage', '2021Usage', '2022Usage', '2023Usage']
+    for file_name in os.listdir(data_dir):
+        if any(file_name.startswith(target) for target in target_files):
+            file_path = os.path.join(data_dir, file_name.replace('.xlsx', '.csv'))
+            df = load_data(file_path)
+            if df is not None:
+                analyze_data(df)
+
