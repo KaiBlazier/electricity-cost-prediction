@@ -10,10 +10,10 @@ def predict_future(df):
     
     # Extract year and month from the date column
     df['year'] = pd.to_datetime(df['date']).dt.year
-    df['month'] = pd.to_datetime(df['date']).dt.month
+    df['months'] = pd.to_datetime(df['date']).dt.months
     
     # Define features and target variable
-    X = df[['year', 'month']]
+    X = df[['year', 'months']]
     y = df['price']
     
     # Train the model
