@@ -13,6 +13,8 @@ python -m venv venv source
 pip install -r requirements.txt
 ## convert Excel files to CSV:
 python scripts/convert_to_csv.py
+##Clean:
+python scripts/clean_data.py
 ## Load and analyze data: 
 python scripts/analyze_data.py
 ## Predict future costs:
