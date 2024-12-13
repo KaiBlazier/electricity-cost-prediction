@@ -1,37 +1,28 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-import os
 
-def load_data(file_path):
-    try:
-        df = pd.read_csv(file_path)
-        return df
-    except Exception as e:
-        print(f"Error loading data: {e}")
-        return None
-
-def preprocess_data(df):
-    # Handle missing values
-    df = df.dropna()
-    # Feature engineering (if needed)
-    # df['new_feature'] = df['existing_feature'] * 2
-    return df
+def load_data():
+    data_files = ['data/2019Usage_converted.csv', 'data/2020Usage_converted.csv', 'data/2021Usage_converted.csv', 'data/2022Usage_converted.csv', 'data/2023Usage_converted.csv']
+    dataframes = []
+    for file in data_files:
+        print(f"Loading file: {file}")
+        df = pd.read_csv(file)
+        dataframes.append(df)
+    combined_df = pd.concat(dataframes)
+    return combined_df
 
 def split_data(df, target_column):
+    if target_column not in df.columns:
+        raise KeyError(f"'{target_column}' not found in DataFrame columns: {df.columns.tolist()}")
     X = df.drop(columns=[target_column])
     y = df[target_column]
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     return X_train, X_test, y_train, y_test
 
 if __name__ == "__main__":
-    data_dir = "data"
-    target_files = ['2019Usage', '2020Usage', '2021Usage', '2022Usage', '2023Usage']
-    target_column = 'target_column_name'
-    for file_name in os.listdir(data_dir):
-        if any(file_name.startswith(target) for target in target_files):
-            file_path = os.path.join(data_dir, file_name.replace('.xlsx', '.csv'))
-            df = load_data(file_path)
-            if df is not None:
-                df = preprocess_data(df)
-                X_train, X_test, y_train, y_test = split_data(df, target_column)
-                print(f"Data loaded and split successfully for {file_name}.")
+    df = load_data()
+    print(df.head())
+    target_column = 'PricePerHour(cents)'  # Replace with your actual target column name
+    X_train, X_test, y_train, y_test = split_data(df, target_column)
+    print(f"Training data shape: {X_train.shape}, {y_train.shape}")
+    print(f"Test data shape: {X_test.shape}, {y_test.shape}")
