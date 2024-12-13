@@ -32,7 +32,8 @@ def analyze_data(df):
     plt.show()
 
 if __name__ == "__main__":
-    file_path = 'data/your_data_file.csv'
+    # Load cleaned data
+    file_path = 'data/cleaned_data_file.csv'
     df = load_data(file_path)
     if df is not None:
         analyze_data(df)
