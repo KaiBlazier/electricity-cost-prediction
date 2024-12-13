@@ -1,4 +1,5 @@
 import pandas as pd
+import os
 
 def load_data(file_path):
     try:
@@ -34,11 +35,13 @@ def save_clean_data(df, output_path):
         print(f"Error saving cleaned data: {e}")
 
 if __name__ == "__main__":
-    # Update this path to the correct file
-    input_file_path = 'data/2019Usage.csv'
-    output_file_path = 'data/cleaned_2019Usage.csv'
-
-    df = load_data(input_file_path)
-    if df is not None:
-        cleaned_df = clean_data(df)
-        save_clean_data(cleaned_df, output_file_path)
+    data_dir = "data"
+    target_files = ['2019Usage', '2020Usage', '2021Usage', '2022Usage', '2023Usage']
+    for file_name in os.listdir(data_dir):
+        if any(file_name.startswith(target) for target in target_files):
+            file_path = os.path.join(data_dir, file_name.replace('.xlsx', '.csv'))
+            df = load_data(file_path)
+            if df is not None:
+                cleaned_df = clean_data(df)
+                output_file_path = file_path.replace('.csv', '_cleaned.csv')
+                save_clean_data(cleaned_df, output_file_path)
