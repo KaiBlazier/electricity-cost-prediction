@@ -1,5 +1,5 @@
-import pandas as pd
 import os
+import pandas as pd
 
 def load_data(file_path):
     try:
@@ -14,17 +14,13 @@ def clean_data(df):
     df = df.dropna()  # Drop rows with missing values
     # Alternatively, you can fill missing values with a specific value or method
     # df = df.fillna(method='ffill')  # Forward fill
-
     # Remove duplicates
     df = df.drop_duplicates()
-
     # Convert data types if necessary
     # For example, convert a column to datetime
     # df['date_column'] = pd.to_datetime(df['date_column'])
-
     # Rename columns for consistency
     df = df.rename(columns=lambda x: x.strip().lower().replace(' ', '_'))
-
     return df
 
 def save_clean_data(df, output_path):
@@ -45,3 +41,5 @@ if __name__ == "__main__":
                 cleaned_df = clean_data(df)
                 output_file_path = file_path.replace('.csv', '_cleaned.csv')
                 save_clean_data(cleaned_df, output_file_path)
+                # Delete the intermediate file
+                os.remove(file_path)
